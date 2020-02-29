@@ -1,0 +1,155 @@
+create database Atividade1;
+
+---------------------CRIAÇÃO DE TABELAS-------------------------
+--Criando Table usuario
+create table Usuario(
+	id_usuario int identity primary key,
+	login_usuario varchar (30) not null,
+	senha_usuario char (8) not null ,
+	dt_expiracao date);
+
+--Criando Table Coordenador
+Create table Coordenador(
+	id_coodenador int identity primary key,
+	id_usuario int,
+	nome_coordenador varchar(30) not null,
+	email_coordenador varchar(30),
+	celular_coordenador char(9));
+--Criando Table Aluno
+create table Aluno(
+	id_aluno int identity primary key,
+	id_usuario int,
+	nome_aluno varchar(30)not null,
+	email_aluno varchar(30),
+	celular_aluno char(9),
+	ra char(9),
+	foto varchar(50));
+--Criando Table Professor
+create table Professor(
+	id_Professor int identity primary key,
+	id_Usuario int,
+	email_professor varchar(50),
+	celular_professor char(9),
+	apelido varchar(15) not null);
+--Criando table disciplina
+create table Disciplina(
+	id_Disciplina int identity primary key,
+	nome_Disciplina varchar(30) not null,
+	data_disciplina datetime,
+	status_disciplina char(9),
+	planodeensino varchar(50),
+	cargahoraria int,
+	competencias varchar(30),
+	habilidades varchar(30),
+	ementa varchar(100),
+	conteudopromagatico varchar(100),
+	bibliografiabasica varchar(50),
+	bibliografiacomplementar varchar(50),
+	percentualpratico numeric(4,2),
+	PercentualTeorico numeric(4,2),
+	id_coordenador int );
+--Criando table Disciplina Ofertada
+create table DisciplinaOferada(
+	id_Disciplina_Ofertada int identity primary key,
+	Iid_coordenador int,
+	dtiniciomatricula datetime,
+	dffimmatricula datetime,
+	id_discipina int,
+	id_curso int,
+	ano int,
+	semestre int,
+	turma char(2),
+	id_professor int,
+	metodologia varchar(50),
+	recursos varchar(30),
+	criterioavaliacao varchar(30),
+	planodealulas varchar(50));
+-- Criando Table Curso
+create table curso (
+	id_curso int  identity(1,1) not null ,
+	nome_curso varchar(60));
+--Criando Table SolicitacaoMatricula
+create table SolicitacaoMatricula(
+	id_SolicitacaoMatricula int identity (1,1) not null,
+	idaluno int,
+	idDisciplinaOfertada int,
+	DtSolicitacao date,
+	idcoordenador int,
+	status varchar(20));
+--Criando Table Atividade
+create table Atividade(
+	id_Atividade int identity (1,1) not null,
+	titulo_atividade varchar(20),
+	descricao varchar(20),
+	conteudo varchar(50),
+	tipo varchar(20),
+	extras varchar(20),
+	id_professor int);
+--Criando Table AtividadeVinculado 
+create table AtividadeVinculada(
+	id_AtividadeVinculada int identity (1,1) not null,		
+	idProfessor int,
+	idDisciplinaOfertada int,
+	Rotulo varchar (20),
+	status varchar (20),
+	DtinicioRespostas date,
+	DtFImRespostas date);
+--Criando Table Entrega
+create table Entrega(
+	id_Entrega int identity (1,1) not null,		
+	id_aluno int,
+	titulo_Entrega varchar(20),
+	resposta_entrega varchar (20),
+	dtentega date, 
+	status varchar (20),
+	idProfessor int,
+	nota int,
+	dtavaliacao date,
+	obs varchar (30));		
+--Criando Table Mensagem
+create table Mensagem(
+	id_mensagem int identity (1,1) not null,		
+	id_aluno int,
+	idProfessor int,
+	assunto varchar (20),
+	referencia varchar (20),
+	conteudo varchar (20),
+	status varchar (20),
+	dtenvio date,
+	dtresposta date,
+	resposta_mensagem varchar (20));	
+
+----------------------CRIANDO CONSTRAINT-----------------------------
+--Criando constraint table usuario
+alter table usuario add
+	constraint uq_login_usuario unique(login_usuario),
+	constraint df_data_expiracao default('1900/01/01') for dt_expiracao;
+
+--Criando constraint table coordenador
+alter table coordenador add
+	constraint fk_id_usuario foreign key(id_usuario) references Usuario (id_usuario),
+	constraint uq_email_coordenador unique (email_coordenador),
+	constraint uq_celular unique(celular_coordenador);
+
+--Criando constraint table aluno
+alter table aluno add
+	constraint fk_id_usuario foreign key(id_usuario) references usuario(id_usuario),
+	constraint uq_email_aluno unique(email_aluno),
+	constraint uq_celular_aluno unique(celular_aluno);
+
+--Criando constraint table professor
+alter table professor add
+	constraint fk_id_usuario foreign key(id_usuario) references usuario(id_usuario),
+	constraint uq_email_professor unique(email_professor),
+	constraint uq_celular_professor unique(celular_professor);
+
+--Criando constraint table disciplina
+alter table disciplina add
+	constraint uq_nome_disciplina unique(nome_disciplina),
+	constraint df_data_disciplina default (getdate())for data_disciplina,
+	constraint ck_status_disciplina check (status='Aberta' or status='Fechada'),
+	constraint df_status_disciplina default('Aberta') for status_disciplina,
+	constraint ck_carga_horaria_disciplina check(cargahoraria='40' or cargahoraria='80'),
+	constraint ck_percentual_pratico_disciplina check(percentualpratico='00' or percentualpratico='100'),
+	constraint ck_percentual_teorico_disciplina check(percentualteorico='00' or percentualteorico='100'),
+	constraint fk_id_coordenador_disciplina foreign key(id_coordenador) references coordenador(id_coordenador);
