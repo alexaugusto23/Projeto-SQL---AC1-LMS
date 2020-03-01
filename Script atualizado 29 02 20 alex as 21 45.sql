@@ -1,4 +1,3 @@
- 
 -- Equipe
 -- Alexsandro Augusto Ignácio        RA 1901705
 -- Priscila Cardoso Vieira de Melo   RA 1901864
@@ -82,7 +81,7 @@ create table SolicitacaoMatricula(
 	idDisciplinaOfertada int,
 	DtSolicitacao date,
 	idcoordenador int,
-	s_status varchar(20);
+	s_status varchar(20) );
 --Criando Table Atividade
 create table Atividade(
 	id_Atividade int identity (1,1) primary key not null,
@@ -184,7 +183,7 @@ alter table curso add
     constraint df_DtSolicitacao default (getdate())for DtSolicitacao,
     constraint fk_idcoordenador foreign key(idcoordenador) references usuario(id_usuario),
     constraint df_s_status default ('Solicitada') for s_status,
-    constraint ck_s_status check (status='Solicitada' or status='Aprovada'), ;
+    constraint ck_s_status check (status='Solicitada' or status='Aprovada') ;
 
 --Criando constraint table Atividade
 alter table Atividade add
@@ -214,21 +213,5 @@ alter table Mensagem add
     constraint fk_id_aluno_msg foreign key(id_aluno_msg) references usuario(id_usuario),
     constraint fk_idProfessor_ms foreign key(idProfessor_ms) references usuario(id_usuario),
     constraint df_status_msg default ('Lido') for status_msg,
-    constraint ck_status_msg check (status='Enviado' or status='Lido' or status'Respondido'),
+    constraint ck_status_msg check (status='Enviado' or status='Lido' or status='Respondido'),
     constraint df_dtresposta default (getdate())for dtresposta;
-
-
-
-
-
-
-    
-
-    
-
-
-
-    
-
-
-
