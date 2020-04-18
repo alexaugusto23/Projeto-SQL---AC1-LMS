@@ -169,7 +169,7 @@ alter table DisciplinaOfertada add
     constraint fk_id_curso foreign key(id_curso) references usuario(id_usuario),
     constraint ck_ano check (ano= 1990 or ano= 2100),
     constraint ck_semestre check (semestre= 1 or semestre= 2),
-    constraint ck_turma check if turma = 'a'or'A','b'or'B','c'or'C','d'or'D','e'or'E','f'or'F','g'or'G','h'or'H','i'or'I','j'or'J','l'or'L','m'or'M','n'or'N','o'or'O','p'or'P','q'or'Q','r'or'R','s'or'S','t'or'T','u'or'U','v'or'V','x'or'X','z'or'Z','k'or'K','w'or'W','y'or'Y',
+    constraint ck_turma check turma = ('a'or'A','b'or'B','c'or'C','d'or'D','e'or'E','f'or'F','g'or'G','h'or'H','i'or'I','j'or'J','l'or'L','m'or'M','n'or'N','o'or'O','p'or'P','q'or'Q','r'or'R','s'or'S','t'or'T','u'or'U','v'or'V','x'or'X','z'or'Z','k'or'K','w'or'W','y'or'Y'),
     constraint fk_id_professor foreign key(id_professor) references usuario(id_usuario);
 
 --Criando constraint table Curso
@@ -206,7 +206,7 @@ alter table Entrega add
     constraint df_tbe_status default ('Entregue') for tbe_status,
     constraint ck_tbe_status check (status='Entregue' or status='Corrigido'),
     constraint fk_idProfessor foreign key(idProfessor) references usuario(id_usuario),
-    constraint ck_nota check ((nota >= 0.00) and nota (<=10.00));
+    constraint ck_nota check ((nota >= 0.00) and (nota <=10.00));
  
 --Criando constraint table Mensagem
 alter table Mensagem add
